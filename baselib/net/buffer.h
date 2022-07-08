@@ -11,9 +11,11 @@ public:
     BUFFER& operator=(const BUFFER& b);
     BUFFER& operator+(const BUFFER& b);
     ~BUFFER();
+    bool empty();
     void append(int s, char* b);
     void append(BUFFER& b);
-    BUFFER left_cut(int sizea);//返回值需要用delete[]进行释放
+    BUFFER left_cut(int sizea);
+    BUFFER right_cut(int sizea);
     void* buff_f()const{
         return buff;
     }

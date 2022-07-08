@@ -19,6 +19,9 @@ SOURCES += \
         baselib/net/channel.cpp \
         baselib/net/channel_factory.cpp \
         baselib/net/chlq.cpp \
+        conn_mgr.cpp \
+        imp.cpp \
+        loop.cpp \
         main.cpp \
         pro/protocol.cpp
 
@@ -32,4 +35,7 @@ HEADERS += \
     baselib/net/channel.h \
     baselib/net/channel_factory.h \
     baselib/net/chlq.h \
+    conn_mgr.h \
+    imp.h \
+    loop.h \
     pro/protocol.h
