@@ -19,6 +19,11 @@ bool PROTOCOL::parser()
     return true;
 }
 
+int PROTOCOL::type()
+{
+    return bh.hr.id;
+}
+
 void PROTOCOL::get_struct(void *dest, int sizea)
 {
     memcpy(dest,(char*)buf.buff_f()+sizeof (bh),sizea);

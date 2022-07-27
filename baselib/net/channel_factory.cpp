@@ -73,7 +73,7 @@ void CHANNEL_FACTORY::epoll_wait_data()
         // 没有属性变化，这个函数会阻塞，直到有变化才往下执行，这里没有设置超时
         int count = epoll_wait(epfd, &wait_event, 1, -1);
         if(count < 1){
-            cout<<"error:"<<errno<<endl;
+            cout<<"CHANNEL_FACTORY::epoll_wait_data:epoll_wait:"<<errno<<endl;
             continue;
         }
         CHANNEL* ptr = (CHANNEL*)wait_event.data.ptr;

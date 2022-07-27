@@ -56,7 +56,7 @@ public:
     void get_struct(void* dest, int sizea);
     BUFFER buf;
 private:
-    HEADER_ROUTER bh;
+    BOTH_HEADER bh;
 };
 #pragma pack(pop)
 

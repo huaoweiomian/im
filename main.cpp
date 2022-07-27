@@ -4,6 +4,7 @@
 #include "pro/protocol.h"
 #include "conn_mgr.h"
 #include "loop.h"
+
 using std::unordered_map;
 void start_svr();
 int main(int argc, char *argv[])
@@ -38,6 +39,10 @@ void start_svr(){
     unordered_map<CHANNEL*, BUFFER> mp;//处理粘包
     BUFFER ret = item(mp,pchl,b);
     PROTOCOL pro(ret);
+    if(!pro.parser()){
+        cout<<"start_svr;pro.parser false"<<endl;
+        return;
+    }
     loop(pro);
 }
 
