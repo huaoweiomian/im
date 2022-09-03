@@ -4,6 +4,9 @@
 #include <pthread.h>
 #include "buffer.h"
 #include <string> //EAGAIN
+#include <unordered_map>
+using std::unordered_map;
+
 class CHANNEL
 {
     friend class CHANNEL_FACTORY;
@@ -26,5 +29,6 @@ private:
     pthread_cond_t cond;
     pthread_mutex_t cmutex;
 };
-
+BUFFER item(unordered_map<CHANNEL*, BUFFER>& mp,
+            CHANNEL* pchl, BUFFER &b);
 #endif // CHANNEL_H

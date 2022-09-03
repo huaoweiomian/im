@@ -76,3 +76,15 @@ void CHANNEL::write_to_self(const BUFFER &b)
         //有错误
     }
 }
+BUFFER item(unordered_map<CHANNEL*, BUFFER>& mp,
+            CHANNEL* pchl, BUFFER &b){
+    mp[pchl].append(b);
+    BUFFER btmp = mp[pchl];
+    int* p = (int*)mp[pchl].buff_f();//取报文头参考protocol.h查看报文定义
+    if(*p > btmp.sizef()){//包长比数据长，说明数据还没接收完。
+        return BUFFER();
+    }
+    BUFFER ret = btmp.left_cut(*p);
+    mp[pchl] = btmp;
+    return ret;
+}
