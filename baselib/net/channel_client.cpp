@@ -29,6 +29,12 @@ CHANNEL_CLIENT::~CHANNEL_CLIENT()
     mycolse();
 }
 
+bool CHANNEL_CLIENT::mysend(BUFFER& b)
+{
+    send(sockfd,b.buff_f(),b.sizef(),0);
+    return true;
+}
+
 void CHANNEL_CLIENT::mycolse()
 {
     if(sockfd == emptyfd_c)

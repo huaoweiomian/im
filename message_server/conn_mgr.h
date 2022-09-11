@@ -10,10 +10,9 @@ class CONN_MGR
 public:
     CONN_MGR();
     CHANNEL* dest_chl(int id);
-    void set(int uid, int msgid);
+    void set(int uid, CHANNEL*chl);
 private:
-    map<int, CHANNEL*> uid_chl;
-    map<int, int> uid_msgid;
+    map<int, CHANNEL*> uid_chl;//客户端连接
 };
 
 CONN_MGR* singleton();
@@ -23,7 +22,7 @@ class CONN_CMGR
 public:
     CONN_CMGR();
     void set(int id, CHANNEL_CLIENT* cc);
-    CHANNEL_CLIENT* cc(int id);
+    CHANNEL_CLIENT* get(int id);
 private:
     map<int, CHANNEL_CLIENT*> id_cc;
 };

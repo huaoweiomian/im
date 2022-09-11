@@ -26,6 +26,8 @@ public:
     bool init(string& ip, int port);
     operator int();
     ~CHANNEL_CLIENT();
+    bool mysend(BUFFER &b);
+    bool myrecv(BUFFER &b);
     void mycolse();
 private:
     int sockfd;

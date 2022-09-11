@@ -4,6 +4,7 @@
 #include "../pro/protocol.h"
 #include "conn_mgr.h"
 #include "../baselib/net/channel.h"
+#include "../baselib/net/channel_client.h"
 class LOOP
 {
 public:
@@ -12,5 +13,5 @@ public:
 
 
 
-void loop(PROTOCOL& pro);
+void loop(PROTOCOL& pro, CHANNEL* pchl);
 #endif // LOOP_H

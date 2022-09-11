@@ -3,8 +3,9 @@
 
 #include "../baselib/net/buffer.h"
 
-
-struct __attribute__ ((__packed__)) HEADER{
+#pragma pack(1)
+const int buff_size_c = 1024;
+struct HEADER{
     int len;//包总长
     int type;//协议类型
     unsigned int count;//包计数
@@ -16,36 +17,51 @@ const int PROTOBUFF_c = 2;
 const int RAW_c = 3;
 //}}
 
-
+//{{HEADER_MSG_SVR::id
+const int MSG_SVR_LOGIN_c = 2;
+const int MSG_SVR_MSG_c = 3;
+//}}
 //router
 //
-
 const int HEADER_ROUTER_c = 0;
-struct __attribute__ ((__packed__)) HEADER_ROUTER{
+struct HEADER_ROUTER{
     int len;//包总长
     int id;//协议体是什么内容
 
 };
-//{{HEADER_ROUTER::id
-const int ROUTER_c = 0;
-const int REPORT_INFO_c = 1;
-//}}
 
-struct __attribute__ ((__packed__)) BOTH_HEADER{
+struct BOTH_HEADER{
     HEADER h;
     HEADER_ROUTER hr;
 };
-#pragma pack(push)
-#pragma pack(1)
-struct ROUTER{
-    int src;//发送方用户id
-    int dest;//接收方用户id
-};
+
 //登录时上报服务信息
 struct REPORT_INFO{
     int uid;//用户id
     int msgid;//消息服务id
 };
+
+//message_server
+typedef HEADER_ROUTER HEADER_MSG_SVR;
+
+
+struct LOGIN{
+    int uid;
+};
+
+struct MESSAGE{
+    MESSAGE(){
+        memset(buff,0,buff_size_c);
+    }
+    int src;
+    int dest;
+    int size;
+    char buff[buff_size_c];//应该用指针，这应该优化
+    int sizef(){
+        return size+4*3;
+    }
+};
+
 class PROTOCOL
 {
 public:
@@ -58,6 +74,6 @@ public:
 private:
     BOTH_HEADER bh;
 };
-#pragma pack(pop)
+#pragma pack()
 
 #endif // PROTOCOL_H

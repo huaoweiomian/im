@@ -14,9 +14,10 @@ CHANNEL *CONN_MGR::dest_chl(int id)
     return it->second;
 }
 
-void CONN_MGR::set(int uid, int msgid)
+
+void CONN_MGR::set(int uid, CHANNEL * chl)
 {
-    uid_msgid[uid] = msgid;
+    uid_chl[uid] = chl;
 }
 
 CONN_MGR *singleton()
@@ -29,12 +30,17 @@ CONN_CMGR *csingleton()
     return &cmgr;
 }
 
+CONN_CMGR::CONN_CMGR()
+{
+
+}
+
 void CONN_CMGR::set(int id, CHANNEL_CLIENT *cc)
 {
     id_cc[id] = cc;
 }
 
-CHANNEL_CLIENT *CONN_CMGR::cc(int id)
+CHANNEL_CLIENT *CONN_CMGR::get(int id)
 {
     map<int, CHANNEL_CLIENT*>::iterator it = id_cc.find(id);
     if(id_cc.end() == it)

@@ -30,7 +30,7 @@ void wait_connect(){
         cout<<"start_svr;pro.parser false"<<endl;
         return;
     }
-    loop(pro);
+    loop(pro,pchl);
 }
 //string ip("192.168.106.148");
 //CHLQ* q = cf.init(ip,6666, 10);
