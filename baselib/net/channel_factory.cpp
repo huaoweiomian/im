@@ -1,5 +1,4 @@
 #include "channel_factory.h"
-
 CHANNEL_FACTORY::CHANNEL_FACTORY()
 {
     sockfd = 0;
@@ -74,6 +73,7 @@ void CHANNEL_FACTORY::epoll_wait_data()
         int count = epoll_wait(epfd, &wait_event, 1, -1);
         if(count < 1){
             cout<<"CHANNEL_FACTORY::epoll_wait_data:epoll_wait:"<<errno<<endl;
+            perror("error:");
             continue;
         }
         CHANNEL* ptr = (CHANNEL*)wait_event.data.ptr;
