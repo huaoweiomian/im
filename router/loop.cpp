@@ -4,14 +4,14 @@ LOOP::LOOP()
 {
 
 }
-void loop(PROTOCOL& pro){
+void loop(PROTOCOL& pro, CHANNEL* chl){
     CONN_MGR* mgr = singleton();
-    switch (pro.type()) {
-    case ROUTER_c:
+    switch (pro.id()) {
+    case MSG_c:
     {
-        ROUTER rr;
-        pro.get_struct(&rr,sizeof (rr));
-        CHANNEL* pdest = mgr->dest_chl(rr.dest);
+        MESSAGE msg;
+        pro.get_content(&msg,sizeof (msg));
+        CHANNEL* pdest = mgr->dest_chl(msg.dest);
         if(pdest){
             pdest->write_to_self(pro.buf);//将消息发送给目标消息服务器
         }else{
@@ -20,11 +20,11 @@ void loop(PROTOCOL& pro){
     }
         break;
 
-    case REPORT_INFO_c:
+    case LOGIN_c:
     {
-        REPORT_INFO ri;
-        pro.get_struct(&ri,sizeof (ri));
-        mgr->set(ri.uid,ri.msgid);
+        LOGIN l;
+        pro.get_content(&l,sizeof (l));
+        mgr->set(l.uid,chl);
     }
         break;
     //default:

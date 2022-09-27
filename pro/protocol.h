@@ -9,6 +9,7 @@ struct HEADER{
     int len;//包总长
     int type;//协议类型
     unsigned int count;//包计数
+    int id;//协议体的内容
 };
 //{{HEADER::type: xml json protobuff raw(就是普通结构体)
 const int XML_c = 0;
@@ -17,36 +18,15 @@ const int PROTOBUFF_c = 2;
 const int RAW_c = 3;
 //}}
 
-//{{HEADER_MSG_SVR::id
-const int MSG_SVR_LOGIN_c = 2;
-const int MSG_SVR_MSG_c = 3;
+//{{HEADER::id
+const int LOGIN_c = 0;
+const int MSG_c = 1;
 //}}
-//router
-//
-const int HEADER_ROUTER_c = 0;
-struct HEADER_ROUTER{
-    int len;//包总长
-    int id;//协议体是什么内容
-
-};
-
-struct BOTH_HEADER{
-    HEADER h;
-    HEADER_ROUTER hr;
-};
 
 //登录时上报服务信息
-struct REPORT_INFO{
+struct LOGIN{
     int uid;//用户id
     int msgid;//消息服务id
-};
-
-//message_server
-typedef HEADER_ROUTER HEADER_MSG_SVR;
-
-
-struct LOGIN{
-    int uid;
 };
 
 struct MESSAGE{
@@ -68,11 +48,14 @@ public:
     PROTOCOL();
     PROTOCOL(BUFFER&b);
     bool parser();
-    int type();
-    void get_struct(void* dest, int sizea);
+    int id();
+    void get_header(HEADER& h);
+    void set_header(HEADER& h);
+    void set_content(int id, void* content,int sizea);
+    void get_content(void* dest, int sizea);
     BUFFER buf;
 private:
-    BOTH_HEADER bh;
+    HEADER h;
 };
 #pragma pack()
 

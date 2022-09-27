@@ -15,6 +15,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        ../baselib/net/buffer.cpp \
+        ../baselib/net/channel.cpp \
+        ../baselib/net/channel_client.cpp \
+        ../baselib/net/channel_factory.cpp \
+        ../baselib/net/chlq.cpp \
+        ../pro/protocol.cpp \
         baselib/net/buffer.cpp \
         baselib/net/channel.cpp \
         baselib/net/channel_factory.cpp \
@@ -31,6 +37,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    ../baselib/net/buffer.h \
+    ../baselib/net/channel.h \
+    ../baselib/net/channel_client.h \
+    ../baselib/net/channel_factory.h \
+    ../baselib/net/chlq.h \
+    ../pro/protocol.h \
     baselib/net/buffer.h \
     baselib/net/channel.h \
     baselib/net/channel_factory.h \

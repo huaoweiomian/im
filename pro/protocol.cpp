@@ -12,20 +12,27 @@ PROTOCOL::PROTOCOL(BUFFER &b)
 
 bool PROTOCOL::parser()
 {
-    if(buf.sizef()<(int)sizeof(bh)){
+    if(buf.sizef()<(int)sizeof(h)){
         return false;
     }
-    memcpy(&bh, buf.buff_f(),sizeof (bh));
+    memcpy(&h, buf.buff_f(),sizeof (h));
     return true;
 }
 
-int PROTOCOL::type()
+int PROTOCOL::id()
 {
-    return bh.hr.id;
+    return h.id;
 }
 
-void PROTOCOL::get_struct(void *dest, int sizea)
+void PROTOCOL::get_content(void *dest, int sizea)
 {
-    memcpy(dest,(char*)buf.buff_f()+sizeof (bh),sizea);
+    memcpy(dest,(char*)buf.buff_f()+sizeof (h),sizea);
+}
+void PROTOCOL::set_content(int id, void *content, int sizea){
+    h.id = id;
+    h.len = sizeof (h)+ sizea;
+    buf.clear();
+    buf.append(sizeof (h),(char*)&h);
+    buf.append(sizea, (char*)content);
 }
 

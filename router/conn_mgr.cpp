@@ -13,11 +13,10 @@ CHANNEL *CONN_MGR::dest_chl(int id)
     return it->second;
 }
 
-void CONN_MGR::set(int uid, int msgid)
+void CONN_MGR::set(int uid, CHANNEL* chl)
 {
-    uid_msgid[uid] = msgid;
+    uid_chl[uid] = chl;
 }
-
 CONN_MGR *singleton()
 {
     return &mgr;
