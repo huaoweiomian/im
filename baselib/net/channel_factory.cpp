@@ -59,7 +59,7 @@ CHANNEL* CHANNEL_FACTORY::produce_channel()
 
 void CHANNEL_FACTORY::del_connect(CHANNEL *chl)
 {
-    delete chl;
+    this->chlq.del_chl(chl);
 }
 
 void CHANNEL_FACTORY::epoll_wait_data()
@@ -71,13 +71,20 @@ void CHANNEL_FACTORY::epoll_wait_data()
         // 监视并等待多个文件（标准输入，udp套接字）描述符的属性变化（是否可读）
         // 没有属性变化，这个函数会阻塞，直到有变化才往下执行，这里没有设置超时
         int count = epoll_wait(epfd, &wait_event, 1, -1);
+        CHANNEL* ptr = (CHANNEL*)wait_event.data.ptr;
         if(count < 1){
             cout<<"CHANNEL_FACTORY::epoll_wait_data:epoll_wait:"<<errno<<endl;
             perror("error:");
+            if(errno == EBADF){
+                close(wait_event.data.fd);
+                epoll_ctl(epfd, EPOLL_CTL_DEL, wait_event.data.fd, &wait_event);
+                ptr->set_status(INVALID);
+                chlq.del_chl(ptr);
+            }
+            sleep(1);
             continue;
         }
-        CHANNEL* ptr = (CHANNEL*)wait_event.data.ptr;
-        ptr->read_from_client();
+        chlq.add_chl(ptr);
     }
 }
 

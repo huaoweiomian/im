@@ -11,6 +11,7 @@ class CHLQ
 public:
     CHANNEL* read();
     CHANNEL* block_read();
+    void del_chl(CHANNEL* chl);
 private:
     CHLQ();
     void add_chl(CHANNEL* v);

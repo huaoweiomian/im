@@ -19,17 +19,24 @@ void start_svr(){
     CHANNEL_FACTORY cf;
     string ip("192.168.106.148");
     CHLQ* q = cf.init(ip,6666, 10);
-    CHANNEL* pchl = q->block_read();
-    BUFFER b;
-    pchl->read_from_self(b);
-    unordered_map<CHANNEL*, BUFFER> mp;//处理粘包
-    BUFFER ret = item(mp,pchl,b);
-    PROTOCOL pro(ret);
-    if(!pro.parser()){
-        cout<<"start_svr;pro.parser false"<<endl;
-        return;
+    while(true){
+        CHANNEL* pchl = q->block_read();
+        if(pchl->status() == INVALID){
+            cout<<"CHANNEL* pchl = q->block_read(); chl invalid"<<endl;
+            continue;
+        }
+        BUFFER b;
+        pchl->recv(b);
+        unordered_map<CHANNEL*, BUFFER> mp;//处理粘包
+        BUFFER ret = item(mp,pchl,b);
+        PROTOCOL pro(ret);
+        if(!pro.parser()){
+            cout<<"start_svr;pro.parser false"<<endl;
+            return;
+        }
+        loop(pro, pchl);
     }
-    loop(pro, pchl);
+
 }
 
 

@@ -46,6 +46,21 @@ CHANNEL *CHLQ::block_read()
     return ret;
 }
 
+void CHLQ::del_chl(CHANNEL *chl)
+{
+    pthread_mutex_lock(&mutex);
+    if(!cl.empty()){
+        for(list<CHANNEL*>::iterator iter = cl.begin();
+            iter != cl.end();iter++){
+            if(*iter == chl){
+                cl.remove(chl);
+                delete chl;
+            }
+        }
+    }
+    pthread_mutex_unlock(&mutex);
+}
+
 void CHLQ::add_chl(CHANNEL *v)
 {
     pthread_mutex_lock(&mutex);

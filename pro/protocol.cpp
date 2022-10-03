@@ -24,6 +24,12 @@ int PROTOCOL::id()
     return h.id;
 }
 
+void PROTOCOL::set_header(HEADER &h)
+{
+    this->h = h;
+    memcpy(buf.buff_f(),&h, sizeof (h));
+}
+
 void PROTOCOL::get_content(void *dest, int sizea)
 {
     memcpy(dest,(char*)buf.buff_f()+sizeof (h),sizea);

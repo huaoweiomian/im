@@ -5,42 +5,54 @@
 #include "../pro/protocol.h"
 #include "conn_mgr.h"
 #include "loop.h"
-void wait_connect();
-void connect_svr();
+#include <signal.h>
+void wait_connect(CHANNEL_FACTORY& cf);
+bool connect_svr();
 
 int main(int argc, char *argv[])
 {
+    //signal(SIGSTOP, SIG_IGN);
     QCoreApplication a(argc, argv);
-    connect_svr();
-    wait_connect();
+    CHANNEL_FACTORY cf;
+    if(!connect_svr()){
+        return 0;
+    }
+    wait_connect(cf);
     return a.exec();
 }
 
-void wait_connect(){
-    CHANNEL_FACTORY cf;
+void wait_connect(CHANNEL_FACTORY& cf){
     string ip("192.168.106.148");
     CHLQ* q = cf.init(ip,8888, 10);
-    CHANNEL* pchl = q->block_read();
-    BUFFER b;
-    pchl->read_from_self(b);
-    unordered_map<CHANNEL*, BUFFER> mp;//处理粘包
-    BUFFER ret = item(mp,pchl,b);
-    PROTOCOL pro(ret);
-    if(!pro.parser()){
-        cout<<"start_svr;pro.parser false"<<endl;
-        return;
+    while(true){
+        CHANNEL* pchl = q->block_read();
+        if(INVALID == pchl->status()){
+            cout<<"CHANNEL* pchl = q->block_read; chl invalid;"<<endl;
+            q->del_chl(pchl);
+            continue;
+        }
+        BUFFER b;
+        pchl->recv(b);
+        unordered_map<CHANNEL*, BUFFER> mp;//处理粘包
+        BUFFER ret = item(mp,pchl,b);
+        PROTOCOL pro(ret);
+        if(!pro.parser()){
+            cout<<"start_svr;pro.parser false"<<endl;
+            continue;
+        }
+        loop(pro,pchl);
     }
-    loop(pro,pchl);
 }
 //string ip("192.168.106.148");
 //CHLQ* q = cf.init(ip,6666, 10);
-void connect_svr(){
+bool connect_svr(){
     CHANNEL_CLIENT* cc = new  CHANNEL_CLIENT() ;
     string ip("192.168.106.148");
     if(!cc->init(ip, 6666)){
         cout<<"CHANNEL_CLIENT::init error"<<endl;
-        return;
+        return false;
     }
     CONN_CMGR* cmgr = csingleton();
     cmgr->set(0,cc);
+    return true;
 }
